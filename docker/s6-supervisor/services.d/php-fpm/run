@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-echo "PHP-FPM is starting..."
-exec /usr/local/sbin/php-fpm --nodaemonize
