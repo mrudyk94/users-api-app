@@ -78,7 +78,7 @@ final readonly class UserController
                 'password' => $user->getPassword(),
             ];
 
-            return new JsonResponse($data, Response::HTTP_CREATED);
+            return new JsonResponse($data, Response::HTTP_OK);
         }
 
         $user = new User();
