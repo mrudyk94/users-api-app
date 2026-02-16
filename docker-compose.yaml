@@ -1,7 +1,7 @@
 services:
 
-  php-fpm-service:
-    container_name: php.horoshop
+  api:
+    container_name: php.api
     build:
       context: .
       dockerfile: docker/config/php-fpm/Dockerfile
@@ -10,26 +10,26 @@ services:
     volumes:
       - ./app:/var/www/html
     networks:
-      horoshop:
+      api:
         aliases:
-          - php.horoshop
+          - php.api
 
-  nginx-service:
-    container_name: nginx.horoshop
+  nginx:
+    container_name: nginx.api
     build:
       context: .
       dockerfile: docker/config/nginx/Dockerfile
     volumes:
       - ./app:/var/www/html
     ports:
-      - ${APP_OUTER_PORT}:${APP_INNER_PORT}
+      - ${APP_OUTER_PORT}:80
     networks:
-      horoshop:
+      api:
         aliases:
-          - nginx.horoshop
+          - nginx.api
   db:
     image: ${DB_IMAGE}
-    container_name: db.horoshop
+    container_name: db.api
     environment:
       TZ: ${TZ}
       MARIADB_DATABASE: ${DB_NAME}
@@ -37,13 +37,13 @@ services:
       MARIADB_PASSWORD: ${DB_PASSWORD}
       MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     ports:
-      - ${DB_OUTER_PORT}:${DB_INNER_PORT}
+      - ${DB_OUTER_PORT}:${DB_PORT}
     volumes:
         - db:/var/lib/mysql
     networks:
-        horoshop:
+        api:
           aliases:
-            - db.horoshop
+            - db.api
 
 volumes:
   db:
@@ -54,5 +54,5 @@ volumes:
       o: bind
 
 networks:
-  horoshop:
-    name: horoshop
+  api:
+    name: api
