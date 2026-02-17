@@ -72,7 +72,7 @@ API використовує **JWT токен** для авторизації к
 Authorization: Bearer YOUR_ROOT_TOKEN
 ```
 
-Замініть YOUR_ROOT_TOKEN на реальний токен root-користувача або будь-якого іншого користувача.
+Замініть YOUR_ROOT_TOKEN на реальний токен root-користувача або будь-якого іншого користувача
 
 ### 🧪 Приклади API-запитів (curl)
 🔹 Отримання токена через login ендпоінт
@@ -133,7 +133,7 @@ curl --location --request DELETE 'http://localhost:8045/v1/api/users/2' \
 
 1. Скопіюй JSON нижче у файл `users-api.postman_collection.json`
 2. Відкрий Postman → **Import** → **File** → вибери цей файл
-3. Замініть `YOUR_ROOT_TOKEN` на токен root-користувача
+3. Замініть `YOUR_ROOT_TOKEN` на токен root-користувача або будь-якого іншого користувача
 4. Тепер готові GET, POST, PUT, DELETE запити до API
 
 {
@@ -143,6 +143,29 @@ curl --location --request DELETE 'http://localhost:8045/v1/api/users/2' \
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
+    {
+      "name": "Login (get token)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"login\": \"root\",\n  \"password\": \"]YZ5oY0m\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8045/v1/api/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8045",
+          "path": ["v1","api","login"]
+        }
+      }
+    },
     {
       "name": "Get Users",
       "request": {
@@ -158,7 +181,7 @@ curl --location --request DELETE 'http://localhost:8045/v1/api/users/2' \
           "protocol": "http",
           "host": ["localhost"],
           "port": "8045",
-          "path": ["api","users","1"]
+          "path": ["v1","api","users","1"]
         }
       }
     },
@@ -185,7 +208,7 @@ curl --location --request DELETE 'http://localhost:8045/v1/api/users/2' \
           "protocol": "http",
           "host": ["localhost"],
           "port": "8045",
-          "path": ["api","users"]
+          "path": ["v1","api","users"]
         }
       }
     },
@@ -212,7 +235,7 @@ curl --location --request DELETE 'http://localhost:8045/v1/api/users/2' \
           "protocol": "http",
           "host": ["localhost"],
           "port": "8045",
-          "path": ["api","users"]
+          "path": ["v1","api","users"]
         }
       }
     },
@@ -231,7 +254,7 @@ curl --location --request DELETE 'http://localhost:8045/v1/api/users/2' \
           "protocol": "http",
           "host": ["localhost"],
           "port": "8045",
-          "path": ["api","users","1"]
+          "path": ["v1","api","users","1"]
         }
       }
     }
