@@ -1,4 +1,7 @@
 security:
+    role_hierarchy:
+        ROLE_ROOT: ROLE_USER
+
     password_hashers:
         App\Domain\Entity\User:
             algorithm: auto

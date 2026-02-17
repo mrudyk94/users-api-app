@@ -46,6 +46,7 @@ final readonly class UserController
         name: 'create',
         methods: ['POST']
     )]
+    #[IsGranted('ROLE_ROOT')]
     public function create(
         #[MapRequestPayload] CreateUserInput $input
     ): JsonResponse
@@ -82,7 +83,11 @@ final readonly class UserController
      * @param UpdateUserInput $input
      * @return JsonResponse
      */
-    #[Route('', name: 'update', methods: ['PUT'])]
+    #[Route('',
+        name: 'update',
+        methods: ['PUT']
+    )]
+    #[IsGranted('ROLE_USER')]
     public function update(
         #[MapRequestPayload] UpdateUserInput $input
     ): JsonResponse
@@ -135,7 +140,9 @@ final readonly class UserController
     #[Route('/{id}',
         name: 'user',
         requirements: ['id' => '[1-9]\d*'],
-        methods: ['GET'])]
+        methods: ['GET']
+    )]
+    #[IsGranted('ROLE_USER')]
     public function getUser(
         int $id
     ): JsonResponse
@@ -173,8 +180,8 @@ final readonly class UserController
     #[Route('/{id}',
         name: 'delete',
         requirements: ['id' => '[1-9]\d*'],
-        methods: ['DELETE'])
-    ]
+        methods: ['DELETE']
+    )]
     #[IsGranted('ROLE_ROOT')]
     public function delete(
         int $id
