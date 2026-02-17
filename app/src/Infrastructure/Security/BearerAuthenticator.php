@@ -52,7 +52,6 @@ class BearerAuthenticator extends AbstractAuthenticator
         $token = str_replace('Bearer ', '', $header);
 
         $user = $this->userRepository->findByApiToken($token);
-
         if (!$user) {
             throw new AuthenticationException('Invalid API token');
         }
@@ -69,21 +68,7 @@ class BearerAuthenticator extends AbstractAuthenticator
         // Перевіряємо час дії токена
         $time = new DateTimeImmutable();
         if ($token->isExpired($time)) {
-            // Токен прострочений — генеруємо новий
-            $newToken = $jwt->builder()
-                ->identifiedBy((string)$user->getId())
-                ->issuedAt($time)
-                ->expiresAt($time->modify('+24 hour'))
-                ->withClaim('login', $user->getLogin())
-                ->withClaim('phone', $user->getPhone()->asString())
-                ->withClaim('roles', $user->getRoles())
-                ->getToken($jwt->signer(), $jwt->signingKey());
-
-            $user->setApiToken($newToken->toString());
-            $this->userRepository->saveAndFlush($user);
-
-            // Передаємо новий токен фронтенду
-            $request->attributes->set('new_api_token', $newToken->toString());
+            throw new AuthenticationException('Invalid API token');
         }
 
         return new SelfValidatingPassport(
@@ -110,6 +95,6 @@ class BearerAuthenticator extends AbstractAuthenticator
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        return new JsonResponse(['status' => 'error', 'message' => 'Unauthorized'], 401);
+        return new JsonResponse(['status' => 'Error', 'message' => $exception->getMessage()], 401);
     }
 }

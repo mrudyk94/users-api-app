@@ -30,6 +30,19 @@ class UserRepository extends DoctrineEntityRepository implements UserRepositoryI
     /**
      * {@inheritDoc}
      */
+    public function findByLogin(string $login): ?User
+    {
+        $qb = $this->createQueryBuilder('u');
+        $qb->addSelect('u')
+            ->where('u.login = :login')
+            ->setParameter('login', $login);
+        $query = $qb->getQuery();
+        return $query->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function findByLoginAndPhone(string $login, MobilePhone $phone): ?User
     {
         $qb = $this->createQueryBuilder('u');

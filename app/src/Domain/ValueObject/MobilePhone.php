@@ -18,11 +18,15 @@ final class MobilePhone implements ValueObject
     public function __construct(string $value)
     {
         if ($value === '') {
-            throw new DomainException('Телефон порожній');
+            throw new DomainException('Phone number is empty');
         }
 
         if(mb_strlen($value) !== self::LENGTH) {
-            throw new DomainException("`$value` неправильне значення для телефону");
+            throw new DomainException("`$value` is not a valid phone number value");
+        }
+
+        if (!preg_match('/^\+380\d{9}$/', $value)) {
+            throw new DomainException("`$value` does not match the format +380XXXXXXXXX");
         }
 
         $this->value = $value;

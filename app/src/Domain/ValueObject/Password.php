@@ -16,13 +16,13 @@ final class Password implements ValueObject
     public function __construct(string $value)
     {
         if ($value === '') {
-            throw new DomainException('Пароль порожній');
+            throw new DomainException('Password is empty');
         }
 
         if(mb_strlen($value) !== self::LENGTH) {
             throw new DomainException(
                 sprintf(
-                    "Пароль занадто довгий. Максимальна довжина: %s символів.",
+                    "Password is too long. Maximum length: %s characters.",
                     self::LENGTH
                 )
             );

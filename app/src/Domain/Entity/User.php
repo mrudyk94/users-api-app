@@ -15,6 +15,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Table(name: 'user')]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+
+/**
+ * Тут я зробив складовий індекс для 'login' і 'phone', а не як в завданні 'login' і 'password'.
+ * Унікальність по 'password' майже ніколи не спрацює, бо завжди створюється новий хеш навіть для того самого пароля.
+ * Складовий індекс на login + password — практично марний.
+ */
 #[ORM\UniqueConstraint(name: 'login_phone_unique_idx', columns: ['login', 'phone'])]
 class User implements UserInterface, EntityInterface, PasswordAuthenticatedUserInterface
 {
@@ -33,8 +39,8 @@ class User implements UserInterface, EntityInterface, PasswordAuthenticatedUserI
     #[ORM\Column(name: 'roles', type: Types::JSON)]
     private array $roles = [];
 
-    #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
-    private string $apiToken;
+    #[ORM\Column(type: Types::STRING, length: 512, nullable: true)]
+    private ?string $apiToken = null;
 
     /**
      * @return string|null

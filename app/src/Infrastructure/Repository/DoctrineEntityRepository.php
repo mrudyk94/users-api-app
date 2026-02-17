@@ -8,7 +8,6 @@ use App\Application\Exception\AppException;
 use App\Application\Port\Repository\EntityRepositoryInterface;
 use App\Domain\Entity\EntityInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Exception\ORMException;
 use Throwable;
 
 abstract class DoctrineEntityRepository extends ServiceEntityRepository implements EntityRepositoryInterface
