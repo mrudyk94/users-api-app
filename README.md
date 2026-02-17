@@ -48,6 +48,13 @@ docker compose exec api composer install
 ```
 
 ### 5️⃣ Міграції бази даних без входу в контейнер
+> ⚠️ Перед виконанням міграцій **потрібно перезапустити контейнери**:
+```bash
+# Перезапуск контейнерів
+docker compose down -v
+
+docker compose up -d
+```
 ```bash
 docker compose exec api php bin/console doctrine:migrations:migrate
 ```
