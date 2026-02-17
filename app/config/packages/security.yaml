@@ -11,7 +11,7 @@ security:
 
     firewalls:
         api:
-            pattern: ^/v1/api
+            request_matcher: App\Infrastructure\Security\ApiRequestMatcher
             stateless: true
             provider: app_user_provider
             custom_authenticators:

@@ -96,17 +96,6 @@ class CreateRootUserCommand extends Command
             $token->toString()
         ));
 
-        $io->table(
-            ['Field', 'Value'],
-            [
-                ['id', $user->getId()],
-                ['login', $user->getLogin()],
-                ['phone', $user->getPhone()],
-                ['password', $password],
-                ['token', $user->getApiToken()],
-            ]
-        );
-
         return Command::SUCCESS;
     }
 }

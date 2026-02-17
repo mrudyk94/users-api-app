@@ -26,8 +26,19 @@ cp env.dist .env
 
 ### 3️⃣ Збірка та запуск Docker
 ```text
-В проєкті є скрипт run.sh для зручної роботи з контейнерами.
+# Збірка Docker контейнерів
+docker compose build --no-cache
+
+# Підняття контейнерів у фоновому режимі
+docker compose up -d
+```
+
+В проєкті також є скрипт `run.sh` для зручної роботи з контейнерами.
+```text
+# Збірка Docker контейнерів
 run build
+
+# Підняття контейнерів у фоновому режимі
 run up
 ```
 
@@ -52,18 +63,32 @@ id:        1
 login:     root
 password:  ]YZ5oY0m
 phone:     +380635492939
-token:     (згенерований токен з таблиці users)
 ```
 ### 🔐 Авторизація
-API використовує токен для авторизації:
+API використовує **JWT токен** для авторизації користувачів.  
+Всі запити до `/v1/api/*` повинні містити заголовок `Authorization` з токеном:
 
 ```html
 Authorization: Bearer YOUR_ROOT_TOKEN
 ```
 
-Замініть YOUR_ROOT_TOKEN на реальний токен root-користувача чи user-користувача
+Замініть YOUR_ROOT_TOKEN на реальний токен root-користувача або будь-якого іншого користувача
 
 ### 🧪 Приклади API-запитів (curl)
+🔹 Отримання токена через login ендпоінт
+
+Доданий ендпоінт для авторизації: /v1/api/login.
+Він приймає `login` та `password` і у відповіді повертає JWT токен, який потім використовується у всіх запитах API.
+```bash
+curl --location --request POST 'http://localhost:8045/v1/api/login' \
+--header 'Content-Type: application/json' \
+--data '{
+    "login": "test_user",
+    "password": "123456"
+}'
+
+```
+
 🔹 Створити користувача
 ```bash
 curl --location --request POST 'http://localhost:8045/v1/api/users' \
@@ -108,10 +133,9 @@ curl --location --request DELETE 'http://localhost:8045/v1/api/users/2' \
 
 1. Скопіюй JSON нижче у файл `users-api.postman_collection.json`
 2. Відкрий Postman → **Import** → **File** → вибери цей файл
-3. Замініть `YOUR_ROOT_TOKEN` на токен root-користувача
+3. Замініть `YOUR_ROOT_TOKEN` на токен root-користувача або будь-якого іншого користувача
 4. Тепер готові GET, POST, PUT, DELETE запити до API
 
-```json
 {
   "info": {
     "name": "Users API App",
@@ -119,6 +143,29 @@ curl --location --request DELETE 'http://localhost:8045/v1/api/users/2' \
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
+    {
+      "name": "Login (get token)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"login\": \"root\",\n  \"password\": \"]YZ5oY0m\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8045/v1/api/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8045",
+          "path": ["v1","api","login"]
+        }
+      }
+    },
     {
       "name": "Get Users",
       "request": {
@@ -134,7 +181,7 @@ curl --location --request DELETE 'http://localhost:8045/v1/api/users/2' \
           "protocol": "http",
           "host": ["localhost"],
           "port": "8045",
-          "path": ["api","users",,"1"]
+          "path": ["v1","api","users","1"]
         }
       }
     },
@@ -161,7 +208,7 @@ curl --location --request DELETE 'http://localhost:8045/v1/api/users/2' \
           "protocol": "http",
           "host": ["localhost"],
           "port": "8045",
-          "path": ["api","users"]
+          "path": ["v1","api","users"]
         }
       }
     },
@@ -188,7 +235,7 @@ curl --location --request DELETE 'http://localhost:8045/v1/api/users/2' \
           "protocol": "http",
           "host": ["localhost"],
           "port": "8045",
-          "path": ["api","users"]
+          "path": ["v1","api","users"]
         }
       }
     },
@@ -207,7 +254,7 @@ curl --location --request DELETE 'http://localhost:8045/v1/api/users/2' \
           "protocol": "http",
           "host": ["localhost"],
           "port": "8045",
-          "path": ["api","users","2"]
+          "path": ["v1","api","users","1"]
         }
       }
     }

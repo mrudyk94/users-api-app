@@ -17,7 +17,14 @@ interface UserRepositoryInterface extends EntityRepositoryInterface
     public function findById(int $id): ?User;
 
     /**
-     * Отримати користувача по номеру телефона
+     * Отримати користувача по логіну
+     * @param string $login
+     * @return User|null
+     */
+    public function findByLogin(string $login): ?User;
+
+    /**
+     * Отримати користувача по логіну і номеру телефона
      * @param string $login
      * @param MobilePhone $phone
      * @return User|null
